@@ -89,7 +89,7 @@ export default function IntensityBySectorBar() {
 
   return (
     <div className="bg-white shadow p-4 rounded">
-      <h3 className="text-lg font-bold mb-3">Intensity by Sector (Avg)</h3>
+      <h3 className="text-lg font-bold mb-3 text-black">Intensity by Sector (Avg)</h3>
       <svg ref={ref} width={570} height={400}></svg>
     </div>
   );

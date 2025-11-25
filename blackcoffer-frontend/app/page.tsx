@@ -19,10 +19,10 @@ export default function Home() {
   return (
     <>
       <div className="p-6">
-        <h1 className="text-2xl font-bold color-black">Insights Dashboard</h1>
+        <h1 className="text-2xl font-bold text-black text-center">Insights Dashboard</h1>
         <KpiCards />
         {/* <FiltersPanel filters={data}/> */}
-        <div style={{marginTop:"40px"}}><IntensityBySectorBar/></div>
+        <div style={{marginTop:"30px"}}><IntensityBySectorBar/></div>
       </div>
     </>
   );
