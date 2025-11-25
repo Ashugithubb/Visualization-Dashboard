@@ -55,15 +55,38 @@ router.get("/agg/intensity-by-sector", async (req, res) => {
 router.get("/agg/likelihood-by-topic", async (req, res) => {
   try {
     const data = await Insight.aggregate([
-      { $match: { topic: { $exists: true, $ne: "" }, likelihood: { $exists: true } } },
-      { $group: { _id: "$topic", avgLikelihood: { $avg: "$likelihood" }, count: { $sum: 1 } } },
+      { 
+        $match: { 
+          topic: { $exists: true, $ne: "" },
+          likelihood: { $exists: true }
+        } 
+      },
+
+      { 
+        $group: { 
+          _id: "$topic",
+          avgLikelihood: { $avg: "$likelihood" },
+          count: { $sum: 1 }
+        } 
+      },
+
+     
+      {
+        $match: { 
+          avgLikelihood: { $gt: 3.5 }   
+        }
+      },
+
       { $sort: { avgLikelihood: -1 } }
     ]);
+
     res.json(data);
+
   } catch (err) {
     res.status(500).json({ error: err.message });
   }
 });
+
 
 /**
  * GET /api/insights/agg/relevance-by-region
