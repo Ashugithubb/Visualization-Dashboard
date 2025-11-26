@@ -1,4 +1,3 @@
-// components/AvgIntensityBySectorChart.tsx
 "use client";
 
 import React, { useMemo } from "react";
@@ -16,32 +15,35 @@ import {
 
 ChartJS.register(CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend);
 
-const AvgIntensityBySectorChart: React.FC = () => {
+const IntensityByRegionChart: React.FC = () => {
   const insights = useAppSelector((state) => state.insights.data);
 
+  // Transform data for Average Intensity by Region
   const chartData = useMemo(() => {
-    const sumBySector: Record<string, number> = {};
-    const countBySector: Record<string, number> = {};
+    const regionData: Record<string, { sum: number; count: number }> = {};
 
     insights.forEach((item: any) => {
-      if (item.sector) {
-        sumBySector[item.sector] = (sumBySector[item.sector] || 0) + item.intensity;
-        countBySector[item.sector] = (countBySector[item.sector] || 0) + 1;
+      if (item.region && item.intensity) {
+        if (!regionData[item.region]) {
+          regionData[item.region] = { sum: 0, count: 0 };
+        }
+        regionData[item.region].sum += item.intensity;
+        regionData[item.region].count += 1;
       }
     });
 
-    const avgBySector: Record<string, number> = {};
-    Object.keys(sumBySector).forEach((sector) => {
-      avgBySector[sector] = sumBySector[sector] / countBySector[sector];
-    });
+    const regions = Object.keys(regionData);
+    const avgIntensity = regions.map(
+      (region) => regionData[region].sum / regionData[region].count
+    );
 
     return {
-      labels: Object.keys(avgBySector),
+      labels: regions,
       datasets: [
         {
-          label: "Average Intensity by Sector",
-          data: Object.values(avgBySector),
-          backgroundColor: "rgba(255, 99, 132, 0.6)",
+          label: "Avg Intensity by Region",
+          data: avgIntensity,
+          backgroundColor: "rgba(75, 192, 192, 0.6)",
         },
       ],
     };
@@ -55,15 +57,18 @@ const AvgIntensityBySectorChart: React.FC = () => {
       },
       title: {
         display: true,
-        text: "Average Intensity by Sector",
+        text: "Average Intensity by Region",
         font: {
           size: 18,
         },
       },
+    },
+    scales: {
+      y: { beginAtZero: true },
     },
   };
 
   return <Bar data={chartData} options={options} />;
 };
 
-export default AvgIntensityBySectorChart;
+export default IntensityByRegionChart;

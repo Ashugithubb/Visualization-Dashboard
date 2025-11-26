@@ -1,4 +1,4 @@
-// routes/aggregateRoutes.js
+
 import express from "express";
 import Insight from "../models/Insight.js";
 
@@ -94,15 +94,28 @@ router.get("/agg/likelihood-by-topic", async (req, res) => {
 router.get("/agg/relevance-by-region", async (req, res) => {
   try {
     const data = await Insight.aggregate([
-      { $match: { region: { $exists: true, $ne: "" }, relevance: { $exists: true } } },
-      { $group: { _id: "$region", totalRelevance: { $sum: "$relevance" }, count: { $sum: 1 } } },
-      { $sort: { totalRelevance: -1 } }
+      {
+        $match: {
+          region: { $exists: true, $ne: "" },
+          relevance: { $exists: true }
+        }
+      },
+      {
+        $group: {
+          _id: "$region",
+          avgRelevance: { $avg: "$relevance" },  // <-- calculate average
+          count: { $sum: 1 }                     // optional (how many documents in each region)
+        }
+      },
+      { $sort: { avgRelevance: -1 } }            // sort by average relevance
     ]);
+
     res.json(data);
   } catch (err) {
     res.status(500).json({ error: err.message });
   }
 });
+
 
 /**
  * GET /api/insights/agg/ints-vs-liklihood
