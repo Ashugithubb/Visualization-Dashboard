@@ -16,7 +16,7 @@ connectDB();
 
 
 app.use(cors({
-    origin: "http://localhost:3003",
+    origin: process.env.CLIENT_API || "https://visualization-dashboard-zsqg.vercel.app",
     methods: ["GET", "POST", "PUT", "DELETE"],
     credentials: true
 }));
