@@ -31,7 +31,11 @@ export default function Home() {
         <KpiCards />
 
         <div className="p-4">
-          <SectorDistributionChart />
+          
+         <div className="flex justify-center mb-8">
+  <SectorDistributionChart />
+</div>
+
           <div className="mb-8">
             <IntensityByRegionChart />
           </div>
@@ -47,8 +51,8 @@ export default function Home() {
           <div className="p-4">
             <Top10TopicsByRelevanceChart />
           </div>
-<AvgIntensityByCountryChart/>
-<CountryBubbleChart/>
+          <AvgIntensityByCountryChart />
+          <CountryBubbleChart />
         </div>
 
 

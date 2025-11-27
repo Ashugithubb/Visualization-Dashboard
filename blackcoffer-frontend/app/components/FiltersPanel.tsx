@@ -2,7 +2,7 @@
 
 import { useDispatch, useSelector } from "react-redux";
 import { useAppDispatch, useAppSelector } from "../redux/hook/hook";
-import { setFilter, setFilters } from "../redux/slice/insights.slice";
+import { Filters, setFilter, setFilters } from "../redux/slice/insights.slice";
 import { fetchFiltersList, fetchInsights } from "../redux/thunk/insightThunk";
 import { useEffect } from "react";
 
@@ -80,7 +80,7 @@ const Dropdown = ({
   );
 };
 
-export default function Filters() {
+export default function FiltersP() {
 
   const [isMobileOpen, setIsMobileOpen] = useState(false);
   const dispatch = useAppDispatch();
@@ -91,12 +91,13 @@ export default function Filters() {
   }, [])
   const lists = useAppSelector((state) => state.filterList.filtersList);
 
-  const handleChange = (key: string, value: string) => {
+  const handleChange = (key: keyof Filters, value: string) => {
     dispatch(setFilter({ key, value }));
     dispatch(fetchInsights({ ...filters, [key]: value }));
   };
+
   const clearAllFilters = () => {
-    setFilters({
+    dispatch(setFilters({
       end_year: "",
       topic: "",
       sector: "",
@@ -106,8 +107,9 @@ export default function Filters() {
       swot: "",
       country: "",
       city: "",
-    });
+    }));
   };
+
 
   const activeFiltersCount = Object.values(filters).filter(Boolean).length;
 
@@ -116,7 +118,8 @@ export default function Filters() {
       <div className="flex items-center justify-between mb-6">
         <div className="flex items-center gap-2">
           <Filter className="w-5 h-5 text-blue-600" />
-          <h3 className="text-xl font-bold text-gray-900">Filters</h3>
+      <h3 className="text-xl font-bold text-gray-900">Filters</h3>
+
           {activeFiltersCount > 0 && (
             <span className="bg-blue-600 text-white text-xs font-semibold px-2 py-1 rounded-full">
               {activeFiltersCount}
