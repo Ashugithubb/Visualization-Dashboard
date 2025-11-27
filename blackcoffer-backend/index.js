@@ -16,7 +16,7 @@ connectDB();
 
 
 app.use(cors({
-    origin: process.env.CLIENT_API || "https://visualization-dashboard-zsqg.vercel.app",
+    origin: process.env.CLIENT_API || "https://visualization-dashboard-2.vercel.app/",
     methods: ["GET", "POST", "PUT", "DELETE"],
     credentials: true
 }));
