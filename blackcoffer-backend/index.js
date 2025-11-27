@@ -15,9 +15,28 @@ connectDB();
 
 
 
+// app.use(cors({
+//     origin: process.env.CLIENT_API || "https://visualization-dashboard-2.vercel.app",
+//     methods: ["GET", "POST", "PUT", "DELETE"],
+//     credentials: true
+// }));
+
 app.use(cors({
-    origin: process.env.CLIENT_API || "https://visualization-dashboard-2.vercel.app/",
-    methods: ["GET", "POST", "PUT", "DELETE"],
+    origin: function (origin, callback) {
+        console.log("REQUEST ORIGIN:", origin);
+        console.log("ENV CLIENT_URL:", process.env.CLIENT_URL);
+
+        const allowed = [
+            "http://localhost:3000",
+            "https://visualization-dashboard-2.vercel.app"
+        ];
+
+        if (!origin || allowed.includes(origin)) {
+            callback(null, true);
+        } else {
+            callback(new Error("Blocked by CORS"));
+        }
+    },
     credentials: true
 }));
 
